@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Valentine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background-color: pink;
+    }
+    .yes-button, .no-button {
+      font-size: 16px;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    .yes-button {
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .no-button {
+      background-color: white;
+      color: red;
+      border: 2px solid red;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Will you be my Valentine? ❤️</h1>
+  <button class="yes-button">Yes</button>
+  <button class="no-button">No</button>
+
+  <script>
+    let messages = ["Are you sure?", "Think again!", "Don't say no!"];
+    let messageIndex = 0;
+
+    function handleNoClick() {
+      const noButton = document.querySelector(".no-button");
+      const yesButton = document.querySelector(".yes-button");
+
+      noButton.textContent = messages[messageIndex];
+      messageIndex = (messageIndex + 1) % messages.length;
+
+      const currentSize = parseFloat(
+        window.getComputedStyle(yesButton).fontSize
+      );
+      yesButton.style.fontSize = `${currentSize * 1.5}px`;
+    }
+
+    function handleYesClick() {
+      window.location.href = "yes_page.html";
+    }
+
+    document.querySelector(".no-button").addEventListener("click", handleNoClick);
+    document.querySelector(".yes-button").addEventListener("click", handleYesClick);
+  </script>
+</body>
+</html>
