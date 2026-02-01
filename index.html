@@ -1,62 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Valentine</title>
+  <meta charset="UTF-8">
+  <title>Valentine 💖</title>
   <style>
     body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #ffd6dc;
       font-family: Arial, sans-serif;
+    }
+
+    .container {
       text-align: center;
-      margin-top: 100px;
-      background-color: pink;
+      position: relative;
     }
-    .yes-button, .no-button {
+
+    h1 {
+      color: #ff4d6d;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      position: relative;
+      height: 100px;
+    }
+
+    button {
+      padding: 12px 24px;
       font-size: 16px;
-      padding: 10px 20px;
-      margin: 10px;
-      cursor: pointer;
-    }
-    .yes-button {
-      background-color: red;
-      color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      position: absolute;
     }
-    .no-button {
-      background-color: white;
-      color: red;
-      border: 2px solid red;
-      border-radius: 5px;
+
+    #yesBtn {
+      background: #4CAF50;
+      color: white;
+      left: 50%;
+      transform: translateX(-120%);
+      transition: transform 0.3s;
+    }
+
+    #noBtn {
+      background: #ff4d6d;
+      color: white;
+      left: 50%;
+      transform: translateX(20%);
     }
   </style>
 </head>
 <body>
-  <h1>Will you be my Valentine? ❤️</h1>
-  <button class="yes-button">Yes</button>
-  <button class="no-button">No</button>
+
+  <div class="container">
+    <h1>Will you be my Valentine? 💘</h1>
+
+    <div class="buttons">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+  </div>
 
   <script>
-    let messages = ["Are you sure?", "Think again!", "Don't say no!"];
-    let messageIndex = 0;
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
 
-    function handleNoClick() {
-      const noButton = document.querySelector(".no-button");
-      const yesButton = document.querySelector(".yes-button");
+    let scale = 1;
 
-      noButton.textContent = messages[messageIndex];
-      messageIndex = (messageIndex + 1) % messages.length;
+    function moveNoButton() {
+      const x = Math.random() * 300 - 150;
+      const y = Math.random() * 200 - 100;
 
-      const currentSize = parseFloat(
-        window.getComputedStyle(yesButton).fontSize
-      );
-      yesButton.style.fontSize = `${currentSize * 1.5}px`;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+      scale += 0.2;
+      yesBtn.style.transform = `scale(${scale})`;
     }
 
-    function handleYesClick() {
+    noBtn.addEventListener("mouseover", moveNoButton);
+    noBtn.addEventListener("click", moveNoButton);
+
+    yesBtn.addEventListener("click", () => {
+      // arahkan ke halaman romantis
       window.location.href = "yes_page.html";
-    }
-
-    document.querySelector(".no-button").addEventListener("click", handleNoClick);
-    document.querySelector(".yes-button").addEventListener("click", handleYesClick);
+    });
   </script>
+
 </body>
 </html>
