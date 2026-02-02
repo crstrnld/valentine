@@ -1,62 +1,138 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Valentine</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Be My Valentine 💘</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #ffe6f0, #ffe0f7);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    h1 {
       text-align: center;
-      margin-top: 100px;
-      background-color: pink;
+      color: #ff4d88;
+      font-size: 2.5em;
+      margin-top: 40px;
+      animation: pulse 1s infinite alternate;
     }
-    .yes-button, .no-button {
-      font-size: 16px;
-      padding: 10px 20px;
-      margin: 10px;
-      cursor: pointer;
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
     }
-    .yes-button {
-      background-color: red;
-      color: white;
+
+    .buttons {
+      position: relative;
+      width: 100vw;
+      height: 80vh;
+    }
+
+    button {
+      padding: 16px 32px;
+      font-size: 20px;
       border: none;
-      border-radius: 5px;
+      border-radius: 12px;
+      cursor: pointer;
+      position: fixed;
+      transition: all 0.3s ease;
+      z-index: 1;
     }
-    .no-button {
-      background-color: white;
-      color: red;
-      border: 2px solid red;
-      border-radius: 5px;
+
+    #yesBtn {
+      background-color: #ff66b2;
+      color: white;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      z-index: 2;
+    }
+
+    #noBtn {
+      background-color: #ff9999;
+      color: white;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      animation: float 4s infinite ease-in-out;
+      color: #ff4d6d;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <h1>Will you be my Valentine? ❤️</h1>
-  <button class="yes-button">Yes</button>
-  <button class="no-button">No</button>
+
+  <h1>Will you be my Valentine? 💖</h1>
+
+  <div class="buttons">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+  </div>
 
   <script>
-    let messages = ["Are you sure?", "Think again!", "Don't say no!"];
-    let messageIndex = 0;
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    let noClicks = 0;
 
-    function handleNoClick() {
-      const noButton = document.querySelector(".no-button");
-      const yesButton = document.querySelector(".yes-button");
+    function moveNoButton() {
+      noClicks++;
 
-      noButton.textContent = messages[messageIndex];
-      messageIndex = (messageIndex + 1) % messages.length;
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+      const yesRect = yesBtn.getBoundingClientRect();
 
-      const currentSize = parseFloat(
-        window.getComputedStyle(yesButton).fontSize
+      const maxX = Math.min(window.innerWidth, 1900) - btnWidth;
+      const maxY = Math.min(window.innerHeight, 975) - btnHeight;
+      let x, y, attempts = 0;
+      do {
+        x = Math.random() * maxX;
+        y = Math.random() * maxY;
+        attempts++;
+      } while (
+        x + btnWidth > yesRect.left - 10 &&
+        x < yesRect.right + 10 &&
+        y + btnHeight > yesRect.top - 10 &&
+        y < yesRect.bottom + 10 &&
+        attempts < 100
       );
-      yesButton.style.fontSize = `${currentSize * 1.5}px`;
+
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+
+      // Perbesar tombol Yes
+      const scale = 1 + noClicks * 0.1;
+      yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
+
+      // Tambahkan hati terbang
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "💗";
+      heart.style.left = `${Math.random() * 100}vw`;
+      heart.style.top = "100vh";
+      heart.style.fontSize = `${Math.random() * 20 + 20}px`;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
     }
 
-    function handleYesClick() {
+    noBtn.addEventListener("mouseover", moveNoButton);
+    noBtn.addEventListener("click", moveNoButton);
+    noBtn.addEventListener("touchstart", moveNoButton);
+
+    yesBtn.addEventListener("click", () => {
       window.location.href = "yes_page.html";
-    }
-
-    document.querySelector(".no-button").addEventListener("click", handleNoClick);
-    document.querySelector(".yes-button").addEventListener("click", handleYesClick);
+    });
   </script>
+
 </body>
 </html>
