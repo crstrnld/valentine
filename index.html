@@ -10,15 +10,14 @@
       padding: 0;
       background: linear-gradient(to bottom right, #ffe6f0, #ffe0f7);
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      height: 100%;
-      overflow: hidden;
+      min-height: 100%;
     }
 
     h1 {
       text-align: center;
       color: #ff4d88;
       font-size: 2.5em;
-      margin-top: 40px;
+      margin-top: 20px;
       animation: pulse 1s infinite alternate;
     }
 
@@ -27,47 +26,48 @@
       to { transform: scale(1.05); }
     }
 
+    .sticker-container {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .sticker {
+      max-width: 500px;
+      border: none;
+    }
+
     .buttons {
-      position: relative;
-      width: 100vw;
-      height: 80vh;
+      margin-top: 30px; /* jarak dari stiker */
+      text-align: center;
     }
 
     button {
-      padding: 16px 32px;
-      font-size: 20px;
       border: none;
-      border-radius: 12px;
+      border-radius: 50px; /* rounded modern style */
       cursor: pointer;
-      position: fixed;
       transition: all 0.3s ease;
-      z-index: 1;
     }
 
     #yesBtn {
       background-color: #ff66b2;
       color: white;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) scale(1);
-      z-index: 2;
+      font-size: 20px;   /* ukuran awal */
+      padding: 16px 32px; /* ukuran awal */
+      margin-right: 40px; /* jarak dengan No */
     }
 
     #noBtn {
       background-color: #ff9999;
       color: white;
+      font-size: 20px;   /* fix ukuran No */
+      padding: 16px 32px; /* fix ukuran No */
     }
 
-    .heart {
-      position: absolute;
-      font-size: 24px;
-      animation: float 4s infinite ease-in-out;
-      color: #ff4d6d;
+    /* efek hover biar modern */
+    #yesBtn:hover {
+      background-color: #ff3385;
     }
-
-    @keyframes float {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-100vh); opacity: 0; }
+    #noBtn:hover {
+      background-color: #e67373;
     }
   </style>
 </head>
@@ -80,57 +80,46 @@
     <button id="noBtn">No</button>
   </div>
 
+  <div class="sticker-container">
+    <img class="sticker" src="Bugcat Sticker by Capoo - Find & Share on GIPHY.gif" alt="Valentine Sticker">
+  </div>
+
   <script>
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
-    let noClicks = 0;
 
-    function moveNoButton() {
-      noClicks++;
+    let yesFontSize = 20; // ukuran awal font Yes
+    let yesPadding = 16;  // ukuran awal padding Yes
+    const noMessages = [
+      "Are you sure?",
+      "Are you serious?",
+      "I will be sad...",
+      "Please think again...",
+      "Don't break my heart 💔"
+    ];
+    let noClickCount = 0;
 
-      const btnWidth = noBtn.offsetWidth;
-      const btnHeight = noBtn.offsetHeight;
-      const yesRect = yesBtn.getBoundingClientRect();
-
-      const maxX = Math.min(window.innerWidth, 1900) - btnWidth;
-      const maxY = Math.min(window.innerHeight, 975) - btnHeight;
-      let x, y, attempts = 0;
-      do {
-        x = Math.random() * maxX;
-        y = Math.random() * maxY;
-        attempts++;
-      } while (
-        x + btnWidth > yesRect.left - 10 &&
-        x < yesRect.right + 10 &&
-        y + btnHeight > yesRect.top - 10 &&
-        y < yesRect.bottom + 10 &&
-        attempts < 100
-      );
-
-      noBtn.style.left = `${x}px`;
-      noBtn.style.top = `${y}px`;
-
-      // Perbesar tombol Yes
-      const scale = 1 + noClicks * 0.1;
-      yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
-
-      // Tambahkan hati terbang
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.textContent = "💗";
-      heart.style.left = `${Math.random() * 100}vw`;
-      heart.style.top = "100vh";
-      heart.style.fontSize = `${Math.random() * 20 + 20}px`;
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 4000);
-    }
-
-    noBtn.addEventListener("mouseover", moveNoButton);
-    noBtn.addEventListener("click", moveNoButton);
-    noBtn.addEventListener("touchstart", moveNoButton);
-
+    // Yes button action
     yesBtn.addEventListener("click", () => {
       window.location.href = "yes_page.html";
+    });
+
+    // No button changes text + enlarges Yes button only
+    noBtn.addEventListener("click", () => {
+      // Change text
+      if (noClickCount < noMessages.length) {
+        noBtn.textContent = noMessages[noClickCount];
+        noClickCount++;
+      } else {
+        noBtn.textContent = "No";
+        noClickCount = 0;
+      }
+
+      // Enlarge Yes button only
+      yesFontSize += 4;
+      yesPadding += 2;
+      yesBtn.style.fontSize = `${yesFontSize}px`;
+      yesBtn.style.padding = `${yesPadding}px ${yesPadding * 2}px`;
     });
   </script>
 
